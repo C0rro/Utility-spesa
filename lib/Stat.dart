@@ -11,97 +11,51 @@ class Stat extends StatefulWidget {
 }
 
 class _StatState extends State<Stat> {
-  Duration _intervallo = const Duration(days: 30); // Default: 1 mese
+  DateTimeRange? _intervallo;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: null,
       body: Consumer<DataManager>(
         builder: (context, manager, _) {
           final now = DateTime.now();
-          final dataInizio = now.subtract(_intervallo);
-          final datiGrafico = manager.calcolaSpesaPerCategoria(dataInizio, now);
+          final dataInizio = _intervallo?.start ?? now.subtract(const Duration(days: 30));
+          final dataFine = _intervallo?.end ?? now;
+
+          final datiGrafico = manager.calcolaSpesaPerCategoria(dataInizio, dataFine);
 
           return Column(
             children: [
-              const SizedBox(height: 36),
+              const SizedBox(height: 41),
               Padding(
-                padding: EdgeInsets.fromLTRB(0, 18, 0, 0),
-                child: Row(
-                  spacing: 5,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    ElevatedButton(
-                      onPressed: () {
-                        setState(() {
-                          _intervallo = const Duration(days: 7);
-                        });
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: _intervallo.inDays == 7
-                            ? Theme.of(context).colorScheme.primary
-                            : Theme.of(context).colorScheme.surface,
-                        foregroundColor: _intervallo.inDays == 7
-                            ? Theme.of(context).colorScheme.onPrimary
-                            : Theme.of(context).colorScheme.onSurface,
-                      ),
-                      child: const Column(children: [Text("1"), Text("Settimana")]),
-                    ),
-                    ElevatedButton(
-                      onPressed: () {
-                        setState(() {
-                          _intervallo = const Duration(days: 30);
-                        });
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: _intervallo.inDays == 30
-                            ? Theme.of(context).colorScheme.primary
-                            : Theme.of(context).colorScheme.surface,
-                        foregroundColor: _intervallo.inDays == 30
-                            ? Theme.of(context).colorScheme.onPrimary
-                            : Theme.of(context).colorScheme.onSurface,
-                      ),
-                      child: const Column(children: [Text("1"), Text("Mese")]),
-                    ),
-                    ElevatedButton(
-                      onPressed: () {
-                        setState(() {
-                          _intervallo = const Duration(days: 120);
-                        });
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: _intervallo.inDays == 120
-                            ? Theme.of(context).colorScheme.primary
-                            : Theme.of(context).colorScheme.surface,
-                        foregroundColor: _intervallo.inDays == 120
-                            ? Theme.of(context).colorScheme.onPrimary
-                            : Theme.of(context).colorScheme.onSurface,
-                      ),
-                      child: const Column(children: [Text("6"), Text("Mesi")]),
-                    ),
-                    ElevatedButton(
-                      onPressed: () {
-                        setState(() {
-                          _intervallo = const Duration(days: 365);
-                        });
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: _intervallo.inDays == 365
-                            ? Theme.of(context).colorScheme.primary
-                            : Theme.of(context).colorScheme.surface,
-                        foregroundColor: _intervallo.inDays == 365
-                            ? Theme.of(context).colorScheme.onPrimary
-                            : Theme.of(context).colorScheme.onSurface,
-                      ),
-                      child: const Column(children: [Text("1"), Text("Anno")]),
-                    ),
-                  ],
-                )
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: FilledButton.icon(
+                  icon: const Icon(Icons.date_range),
+                  label: Text(
+                    "${dataInizio.day}/${dataInizio.month}/${dataInizio.year} "
+                        " - ${dataFine.day}/${dataFine.month}/${dataFine.year}",
+                  ),
+                  onPressed: () async {
+                    final picked = await showDateRangePicker(
+                      context: context,
+                      firstDate: DateTime(2000),
+                      lastDate: now,
+                      initialDateRange: _intervallo ??
+                          DateTimeRange(
+                            start: now.subtract(const Duration(days: 30)),
+                            end: now,
+                          ),
+                    );
 
+                    if (picked != null) {
+                      setState(() {
+                        _intervallo = picked;
+                      });
+                    }
+                  },
+                ),
               ),
-
-              const SizedBox(height: 16),
+              const SizedBox(height: 30),
               Expanded(child: GraficoStatPage(datiGrafico: datiGrafico)),
             ],
           );
@@ -110,3 +64,5 @@ class _StatState extends State<Stat> {
     );
   }
 }
+
+
