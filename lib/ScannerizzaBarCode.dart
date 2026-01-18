@@ -22,7 +22,7 @@ class _ScannerizzaBarCodeState extends State<ScannerizzaBarCode> {
             flex: 4,
             child: MobileScanner(
               onDetect: (barcodeCapture) async {
-                if (isProcessing) return; // Blocca scansioni multiple
+                if (isProcessing) return;
 
                 final String code = barcodeCapture.barcodes.first.rawValue ?? '---';
 
@@ -38,7 +38,6 @@ class _ScannerizzaBarCodeState extends State<ScannerizzaBarCode> {
                   ),
                 );
 
-                // Quando torni indietro, riattiva la scansione
                 setState(() {
                   isProcessing = false;
                 });

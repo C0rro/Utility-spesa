@@ -99,7 +99,7 @@ class _AggiungiScansionePageState extends State<AggiungiScansionePage> {
   void _salvaAlimento() {
     if (_formKey.currentState!.validate() && _dataDiScadenza != null && _dataDiAcquisto != null) {
       if (widget.alimento != null) {
-        // modifica
+
         final a = widget.alimento!;
         a.nome = _nomeController.text.trim();
         a.marca = _marcaController.text.trim();
@@ -111,7 +111,7 @@ class _AggiungiScansionePageState extends State<AggiungiScansionePage> {
         a.posizione = _posizioneSelezionata!;
         Provider.of<DataManager>(context, listen: false).modificaAlimento(a);
       } else {
-        // nuovo
+
         final nuovoAlimento = Alimento(
           _nomeController.text.trim(),
           _marcaController.text.trim(),
@@ -140,7 +140,9 @@ class _AggiungiScansionePageState extends State<AggiungiScansionePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Aggiungi Alimento')),
+      appBar: AppBar(
+        title: Text(widget.alimento == null ? 'Aggiungi Alimento' : 'Modifica ${_nomeController.text}'),
+      ),
       body: _isLoading
         ? const Center(child: CircularProgressIndicator(),)
 

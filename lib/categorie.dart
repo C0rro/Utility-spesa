@@ -64,25 +64,25 @@ extension categorieExtension on categorie {
   Color get colore {
     switch (this) {
       case categorie.bevande:
-        return Colors.blue.shade500;
+        return Colors.cyan.shade400;
       case categorie.fruttaVerdura:
-        return Colors.green.shade500;
+        return Colors.green.shade600;
       case categorie.panificati:
-        return Colors.red.shade500;
+        return Colors.deepOrange.shade800;
       case categorie.spezieIgredienti:
-        return Colors.orange.shade500;
+        return Colors.lime.shade800;
       case categorie.carne:
-        return Colors.brown.shade500;
+        return Colors.brown.shade700;
       case categorie.pesce:
-        return Colors.cyan.shade500;
+        return Colors.teal.shade400;
       case categorie.surgelati:
-        return Colors.indigo.shade500;
+        return Colors.blueAccent.shade700;
       case categorie.pastaRisoCereali:
-        return Colors.yellow.shade500;
+        return Colors.amber.shade400;
       case categorie.dolci:
-        return Colors.pink.shade500;
+        return Colors.pink.shade300;
       case categorie.latteDerivati:
-        return Colors.purple.shade500;
+        return Colors.purple.shade400;
     }
   }
 }
